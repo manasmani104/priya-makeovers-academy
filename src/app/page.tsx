@@ -6,6 +6,7 @@ import StudentSuccess from "@/components/sections/StudentSuccess";
 import Gallery from "@/components/sections/Gallery";
 import Testimonials from "@/components/sections/Testimonials";
 import Contact from "@/components/sections/Contact";
+import WhatsAppFloat from "@/components/ui/WhatsAppFloat";
 
 export default function Home() {
   return (
@@ -18,6 +19,7 @@ export default function Home() {
       <Gallery />
       <Testimonials />
       <Contact />
+      <WhatsAppFloat />
     </>
   );
 }

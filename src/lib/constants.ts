@@ -6,7 +6,7 @@ export const SITE_CONFIG = {
   url: "https://priyamakeoversacademy.com",
   phone: "078692 43976",
   whatsapp: "917869243976",
-  email: "hello@priyamakeoversacademy.com",
+  email: "priyavishwakarma495@gmail.com",
   address:
     "5Bx, Sector H, Rajharsh Colony, Nayapura, Bhopal, Madhya Pradesh 462042",
   hours: "Mon – Sat: 9:00 AM – 8:00 PM | Sun: 10:00 AM – 6:00 PM",
