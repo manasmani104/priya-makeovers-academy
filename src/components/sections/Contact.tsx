@@ -8,8 +8,6 @@ import {
   MapPin,
   Clock,
   MessageCircle,
-  Send,
-  Loader2,
 } from "lucide-react";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import SectionHeading from "@/components/ui/SectionHeading";
@@ -33,39 +31,39 @@ const initialForm: FormData = {
   message: "",
 };
 
+const SERVICE_LABELS: Record<string, string> = {
+  "bridal-makeup": "Bridal Makeup",
+  "salon-service": "Salon Service",
+  "basic-cosmetology": "Basic Cosmetology",
+  "advanced-cosmetology": "Advanced Cosmetology",
+  "professional-training": "Professional Beauty Training",
+  other: "Other",
+};
+
 export default function Contact() {
   const [form, setForm] = useState<FormData>(initialForm);
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">(
-    "idle"
-  );
-  const [errorMessage, setErrorMessage] = useState("");
+  const [status, setStatus] = useState<"idle" | "success">("idle");
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    setStatus("loading");
-    setErrorMessage("");
 
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
+    const serviceLabel = SERVICE_LABELS[form.service] || form.service;
+    const text = [
+      "Hello Priya Makeovers Academy!",
+      "",
+      `Name: ${form.name}`,
+      `Email: ${form.email}`,
+      `Phone: ${form.phone}`,
+      `Service / Course: ${serviceLabel}`,
+      "",
+      `Message: ${form.message}`,
+    ].join("\n");
 
-      const data = await res.json();
+    const url = `https://wa.me/${SITE_CONFIG.whatsapp}?text=${encodeURIComponent(text)}`;
+    window.open(url, "_blank", "noopener,noreferrer");
 
-      if (!res.ok) {
-        throw new Error(data.error || "Something went wrong");
-      }
-
-      setStatus("success");
-      setForm(initialForm);
-    } catch (err) {
-      setStatus("error");
-      setErrorMessage(
-        err instanceof Error ? err.message : "Failed to send message"
-      );
-    }
+    setStatus("success");
+    setForm(initialForm);
   };
 
   return (
@@ -169,41 +167,16 @@ export default function Contact() {
               </div>
 
               {status === "success" && (
-                <p className="text-sm text-green-600 bg-green-50 rounded-lg px-4 py-3">
-                  Thank you! Your message has been sent successfully. We&apos;ll get back to you soon.
-                </p>
-              )}
-              {status === "error" && (
-                <p className="text-sm text-red-600 bg-red-50 rounded-lg px-4 py-3">
-                  {errorMessage}
+                <p className="text-sm text-green-700 bg-green-50 rounded-lg px-4 py-3">
+                  WhatsApp opening… complete the send there. We&apos;ll reply soon!
                 </p>
               )}
 
-              <Button type="submit" variant="primary" disabled={status === "loading"}>
-                {status === "loading" ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    Sending...
-                  </>
-                ) : (
-                  <>
-                    <Send className="h-4 w-4" />
-                    Send Message
-                  </>
-                )}
+              <Button type="submit" variant="whatsapp">
+                <MessageCircle className="h-4 w-4" />
+                Send on WhatsApp
               </Button>
             </form>
-
-            <div className="mt-8">
-              <Button
-                href={`https://wa.me/${SITE_CONFIG.whatsapp}?text=Hi! I'd like to inquire about Priya Makeovers Academy.`}
-                variant="whatsapp"
-                className="w-full sm:w-auto"
-              >
-                <MessageCircle className="h-4 w-4" />
-                Chat on WhatsApp
-              </Button>
-            </div>
           </motion.div>
 
           <motion.div
